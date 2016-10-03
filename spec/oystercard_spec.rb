@@ -22,4 +22,20 @@ describe Oystercard do
     end
   end
 
+  describe '#money coming off card' do
+
+    it 'deducts money' do
+      oystercard = Oystercard.new
+      expect(oystercard).to respond_to :deduct
+    end
+
+    it 'deducts £2 per journey' do
+      oystercard = Oystercard.new
+      oystercard.top_up(10)
+      oystercard.deduct(2)
+      expect(oystercard.balance).to eq 8
+    end
+
+  end
+
 end
