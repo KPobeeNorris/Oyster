@@ -23,7 +23,11 @@ class Oystercard
   def touch_in(station)
     fail "Insufficient funds for journey" if @balance < MINIMUM_BALANCE
     @entry_station = station
-    if !@current_journey.empty? == 1
+    touch_in_writer
+  end
+
+  def touch_in_writer
+    if @current_journey.length == 1
       @current_journey << {exit_station: "INCOMPLETE"}
       @history << @current_journey
       @current_journey << {entry_station: station}
