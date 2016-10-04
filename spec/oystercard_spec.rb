@@ -2,6 +2,9 @@ require 'oystercard'
 
 describe Oystercard do
   subject(:card) {described_class.new}
+  #, balance => Oystercard::MINIMUM_BALANCE
+  let(:mudchute) {double :station}
+  let(:bank)     {double :station}
 
   context 'balance' do
     it 'have balance' do
@@ -66,10 +69,16 @@ describe Oystercard do
       card.touch_in
       expect{card.touch_out}.to change{card.balance}.by(-Oystercard::FARE)
     end
-
   end
 
+  context 'journey status and history' do
 
+    it 'records the entry station on touch in' do
+      card.top_up(Oystercard::MINIMUM_BALANCE)
+      card.touch_in(mudchute)
+      expect(card.entry_station).to eq mudchute
+    end
 
+  end
 
 end
