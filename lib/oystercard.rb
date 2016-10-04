@@ -30,6 +30,7 @@ class Oystercard
   def touch_out
     @in_journey = false
     deduct(FARE)
+    @entry_station = nil
   end
 
   def in_journey?
