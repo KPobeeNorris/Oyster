@@ -28,14 +28,11 @@ describe Oystercard do
 
   context '#money coming off card' do
 
-    it 'deducts money' do
-      expect(card).to respond_to :deduct
-    end
-
-    it 'deducts (fare(£2)) per journey' do
-      card.top_up(10)
-      card.deduct(2)
-      expect(card.balance).to eq 8
+    it 'deducts fare per journey' do
+      card.top_up(Oystercard::MINIMUM_BALANCE)
+      card.touch_in
+      card.touch_out
+      expect(card.balance).to eq Oystercard::MINIMUM_BALANCE - Oystercard::FARE
     end
 
   end
@@ -47,14 +44,27 @@ describe Oystercard do
     end
 
     it 'touching in registers that the card is in journey' do
+      card.top_up(Oystercard::MINIMUM_BALANCE)
       card.touch_in
       expect(card.in_journey?).to eq true
     end
 
+    it 'raises error if card below minimum balance when touching in' do
+      card.top_up(Oystercard::MINIMUM_BALANCE - 1)
+      expect{card.touch_in}.to raise_error "Insufficient funds for journey"
+    end
+
     it 'touching out registers the card as no longer being in journey' do
+      card.top_up(Oystercard::MINIMUM_BALANCE)
       card.touch_in
       card.touch_out
       expect(card.in_journey?).to eq false
+    end
+
+    it 'charges the card on touch out' do
+      card.top_up(Oystercard::MINIMUM_BALANCE)
+      card.touch_in
+      expect{card.touch_out}.to change{card.balance}.by(-Oystercard::FARE)
     end
 
   end
