@@ -76,11 +76,6 @@ describe Oystercard do
       expect(card.entry_station). to eq nil
     end
 
-    it 'records the exit station on touch out' do
-      card.touch_out(station)
-      expect(card.exit_station).to eq station
-    end
-
     it 'stores entry station in current journey on touch in' do
       card.touch_in(station)
       expect(card.current_journey).to include entry: station, exit: nil

@@ -2,7 +2,7 @@ require_relative 'station'
 class Oystercard
 
   attr_reader :balance, :entry_station, :exit_station, :history,
-              :current_journey 
+              :current_journey
 
   MONEY_LIMIT = 90
   MINIMUM_BALANCE = 1
@@ -28,11 +28,9 @@ class Oystercard
 
   def touch_out(station)
     deduct(FARE)
-    # @exit_station = station
     @current_journey[:exit] = station
     @entry_station = nil
     @history << current_journey
-    #@exit_station = nil
     # @current_journey = {entry: nil, exit: nil}
   end
 
