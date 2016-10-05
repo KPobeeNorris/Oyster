@@ -70,27 +70,24 @@ describe Oystercard do
       expect(card.entry_station).to eq station
     end
 
-    it 'expects entry station to be nil after touch out' do
+    it 'expects station to be nil after touch out' do
       card.touch_in(station)
       card.touch_out(station)
       expect(card.entry_station). to eq nil
     end
 
+    it 'records the exit station on touch out' do
+      card.touch_out(station)
+      expect(card.exit_station).to eq station
+    end
+
     it 'stores entry station in current journey on touch in' do
       card.touch_in(station)
-      expect(card.current_journey).to include entry: station
+      expect(card.current_journey).to include entry: station, exit: nil
     end
 
-    it 'stores exit and entry station in current journey on touch out' do 
-      card.touch_in(station)
-      card.touch_out(station)
-      expect(card.current_journey).to include entry: station, exit: station
-    end
 
-    it 'stores current journey into history when current journey is complete' do 
-      card.touch_in(station)
-      card.touch_out(station)
-      expect(card.history).to include ({entry: station, exit: station})
-    end 
-  end 
+
+  end
+
 end
