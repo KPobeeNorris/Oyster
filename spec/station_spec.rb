@@ -14,8 +14,6 @@ describe Station do
       expect(stat.zone).to eq 2
     end
 
-
   end
-
 
 end

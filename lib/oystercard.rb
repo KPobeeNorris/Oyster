@@ -1,4 +1,6 @@
 require_relative 'station'
+require_relative 'journey'
+
 class Oystercard
 
   attr_reader :balance, :entry_station, :exit_station, :history,
@@ -34,10 +36,7 @@ class Oystercard
     # @current_journey = {entry: nil, exit: nil}
   end
 
-  def in_journey?
-    return false if @entry_station == nil
-    true
-  end
+
 
 
 private

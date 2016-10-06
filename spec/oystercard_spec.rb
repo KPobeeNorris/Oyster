@@ -37,24 +37,9 @@ describe Oystercard do
 
   context 'touching in and out' do
 
-    it 'responds to in_journey' do
-      expect(card.in_journey?).to eq(true).or eq(false)
-    end
-
-    it 'touching in registers that the card is in journey' do
-      card.touch_in(station)
-      expect(card.in_journey?).to eq true
-    end
-
     it 'raises error if card below minimum balance when touching in' do
       card.top_up(-1)
       expect{card.touch_in(station)}.to raise_error "Insufficient funds for journey"
-    end
-
-    it 'touching out registers the card as no longer being in journey' do
-      card.touch_in(station)
-      card.touch_out(station)
-      expect(card.in_journey?).to eq false
     end
 
     it 'charges the card on touch out' do
@@ -63,26 +48,6 @@ describe Oystercard do
     end
   end
 
-  context 'journey status and history' do
-
-    it 'records the entry station on touch in' do
-      card.touch_in(station)
-      expect(card.entry_station).to eq station
-    end
-
-    it 'expects station to be nil after touch out' do
-      card.touch_in(station)
-      card.touch_out(station)
-      expect(card.entry_station). to eq nil
-    end
-
-    it 'stores entry station in current journey on touch in' do
-      card.touch_in(station)
-      expect(card.current_journey).to include entry: station, exit: nil
-    end
-
-
-
-  end
+  
 
 end
