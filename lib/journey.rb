@@ -3,7 +3,10 @@ require_relative 'station'
 
 class Journey
 
-  attr_reader :current_journey, :journey_history
+  MINIMUM_FARE = 1
+  PENALTY_FARE = 6
+
+  attr_reader :current_journey, :journey_history, :fare
 
   def initialize
     @journey_history = []
@@ -14,10 +17,13 @@ class Journey
     if @current_journey[:exit_station] == nil && @current_journey[:entry_station] != nil
       record_journey_history
     end
+    start_clear_journey(station)
+  end
+
+  def start_clear_journey(station)
     reset_current_journey
     @current_journey[:entry_station] = station.name
     @current_journey[:entry_zone] = station.zone
-    [station.name, station.zone]
   end
 
   def end_journey(station)
@@ -35,7 +41,11 @@ class Journey
   end
 
   def fare
-
+    if @current_journey[:entry_station] == nil || @current_journey[:exit_station] == nil
+      PENALTY_FARE
+    else
+      MINIMUM_FARE
+    end
   end
 
   private

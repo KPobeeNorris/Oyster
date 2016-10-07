@@ -8,8 +8,6 @@ class Oystercard
 
   MONEY_LIMIT = 90
   MINIMUM_BALANCE = 1
-  FARE = 1
-  PENALTY_FARE = 6
 
   def initialize
     @balance = 20
@@ -18,16 +16,13 @@ class Oystercard
 
   def touch_in(station)
     fail "Insufficient funds for journey" if @balance < MINIMUM_BALANCE
+    incomplete_journey
     @journey.start_journey(station)
-    if @journey.journey_history.last[:exit_station] == nil
-      @balance -= PENALTY_FARE
-    end
   end
 
   def touch_out(station)
     @journey.end_journey(station)
-    deduct_fare
-    [station.name, station.zone, FARE, @balance]
+    deduct(@journey.fare)
   end
 
 
@@ -36,8 +31,19 @@ class Oystercard
     @balance += money
   end
 
-  def deduct
-      @balance-= FARE
+  def incomplete_journey
+    if @journey.current_journey[:entry_station] != nil && @journey.current_journey[:exit_station] == nil
+      deduct(@journey.fare)
+      record_and_reset
+    end
   end
 
+  def deduct(fare)
+      @balance -= fare
+  end
+
+  def record_and_reset
+    @journey.record_journey_history
+    @journey.reset_current_journey
+  end
 end
