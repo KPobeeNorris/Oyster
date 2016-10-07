@@ -16,7 +16,8 @@ class Journey
     if @current_journey[:entry_station] == nil || @current_journey[:exit_station] == nil
       PENALTY_FARE
     else
-      MINIMUM_FARE
+      zone_difference = (@current_journey[:entry_zone] - @current_journey[:exit_zone]).abs
+      (MINIMUM_FARE + zone_difference)
     end
   end
 
