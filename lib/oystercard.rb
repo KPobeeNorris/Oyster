@@ -3,7 +3,7 @@ require_relative 'journey'
 
 class Oystercard
 
-  attr_reader :balance, :history, :current_journey
+  attr_reader :balance, :journey
 
 
   MONEY_LIMIT = 90
@@ -11,33 +11,21 @@ class Oystercard
   FARE = 1
 
   def initialize
-    @balance = 0
-    @journey_history = []
-    @current_journey = {entry_station: nil, entry_zone: nil, exit_station: nil, exit_zone: nil}
+    @balance = 5
+    @journey = Journey.new
   end
 
   def touch_in(station)
-    reset_current_journey
     fail "Insufficient funds for journey" if @balance < MINIMUM_BALANCE
-    @current_journey[:entry_station] = station.name
-    @current_journey[:entry_zone] = station.zone
+    @journey.start_journey(station)
   end
 
   def touch_out(station)
-    @current_journey[:exit_station] = station.name
-    @current_journey[:exit_zone] = station.zone
+    @journey.end_journey(station)
     deduct_fare
-    record_journey_history
-
+    [station.name, station.zone, FARE, @balance]
   end
 
-  def record_journey_history
-    @journey_history << @current_journey
-  end
-
-  def reset_current_journey
-    @current_journey = {entry_station: nil, exit_station: nil, entry_zone: nil, exit_zone: nil}
-  end
 
   def top_up(money)
     fail "Card limit is #{MONEY_LIMIT}." if money + @balance > MONEY_LIMIT
