@@ -34,6 +34,10 @@ class Journey
     @current_journey = {entry_station: nil, exit_station: nil, entry_zone: nil, exit_zone: nil}
   end
 
+  def fare
+
+  end
+
   private
 
 end
